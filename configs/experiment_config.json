@@ -1,0 +1,79 @@
+{
+    "dataset": "ESC-50",
+    "sample_rate": 44100,
+    "duration_seconds": 5,
+    "num_classes": 50,
+    "num_groups": 7,
+    "split": {
+        "train": 1200,
+        "validation": 403,
+        "test": 397,
+        "source_independent": true,
+        "packaged_audio_per_split": 8
+    },
+    "level1": {
+        "architecture": "VGG16",
+        "condition": "No Filter",
+        "validation_accuracy_percent": 81.89,
+        "validation_macro_f1": 0.8183,
+        "test_top1_routing_accuracy_percent": 82.62
+    },
+    "level2": {
+        "specialists": {
+            "animal": {
+                "group": "Animal",
+                "model": "efficientnetb2",
+                "condition": "No Filter",
+                "file": "l2_animal_source_independent.pt"
+            },
+            "birds": {
+                "group": "Birds",
+                "model": "efficientnetb0",
+                "condition": "No Filter",
+                "file": "l2_birds_source_independent.pt"
+            },
+            "domestic_sounds": {
+                "group": "Domestic sounds",
+                "model": "efficientnetb2",
+                "condition": "PCEN",
+                "file": "l2_domestic_sounds_source_independent.pt"
+            },
+            "human": {
+                "group": "Human",
+                "model": "vgg19",
+                "condition": "Audio Crop",
+                "file": "l2_human_source_independent.pt"
+            },
+            "machine_sounds": {
+                "group": "Machine Sounds",
+                "model": "vgg16",
+                "condition": "Noise Removal",
+                "file": "l2_machine_sounds_source_independent.pt"
+            },
+            "natural_soundscapes": {
+                "group": "Natural Soundscapes",
+                "model": "vgg16",
+                "condition": "Noise Removal",
+                "file": "l2_natural_soundscapes_source_independent.pt"
+            },
+            "outdoor_noises": {
+                "group": "Outdoor noises",
+                "model": "efficientnetb2",
+                "condition": "High Pass",
+                "file": "l2_outdoor_noises_source_independent.pt"
+            }
+        }
+    },
+    "hierarchy": {
+        "routing": "Top-2",
+        "fusion_alpha": 0.2
+    },
+    "final_test": {
+        "samples": 397,
+        "correct": 320,
+        "accuracy_percent": 80.6,
+        "macro_f1": 0.8034,
+        "weighted_f1": 0.8029,
+        "conditional_level2_accuracy_percent": 97.56
+    }
+}
