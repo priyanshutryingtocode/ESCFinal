@@ -76,9 +76,6 @@ def run_inference(audio_path):
     print(f"Fusion rule: class score = specialist probability * group probability^{ALPHA}")
     print("If a class appears in both specialists, keep its higher fused score.")
 
-    # ------------------------------------------------
-    # LEVEL 1
-    # ------------------------------------------------
 
     print("LEVEL 1 — GROUP CLASSIFICATION")
 
@@ -90,7 +87,6 @@ def run_inference(audio_path):
         len(GROUPS)
     )
 
-    # Use checkpoint class order if saved; otherwise training order.
     l1_classes = l1_ckpt.get("classes", GROUPS)
 
     x_l1 = preprocess_audio(
@@ -107,7 +103,6 @@ def run_inference(audio_path):
             "Level-1 checkpoint classes do not match configured groups."
         )
 
-    # Align checkpoint probability columns to canonical group order.
     aligned_probs = np.zeros(len(GROUPS), dtype=np.float64)
 
     for i, group in enumerate(l1_classes):
@@ -124,9 +119,6 @@ def run_inference(audio_path):
     for idx in top2:
         print(f"  {GROUPS[idx]} (group probability {aligned_probs[idx] * 100:.2f}%)")
 
-    # ------------------------------------------------
-    # LEVEL 2 — RUN BOTH SELECTED SPECIALISTS
-    # ------------------------------------------------
 
     print("LEVEL 2 — SPECIALIST CLASSIFICATION")
 
@@ -142,7 +134,6 @@ def run_inference(audio_path):
             f"l2_{key}_source_independent.pt"
         )
 
-        # Checkpoint metadata is the authoritative class ordering.
         checkpoint = torch.load(
             checkpoint_path,
             map_location="cpu",
@@ -209,9 +200,6 @@ def run_inference(audio_path):
 
         del model
 
-    # ------------------------------------------------
-    # FINAL 50-CLASS RESULT
-    # ------------------------------------------------
 
     if not final_scores:
         raise RuntimeError("No specialist produced a prediction.")
@@ -242,7 +230,6 @@ def run_inference(audio_path):
         if predicted_class in specialist_outputs.get(group, {}).get("classes", [])
     ))
     print("Normalized fused share:", f"{confidence * 100:.2f}%")
-    print("=" * 72)
 
     return {
         "audio": str(audio_path),
