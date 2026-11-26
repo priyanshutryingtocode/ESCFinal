@@ -1,0 +1,18 @@
+{
+  "serviceName": "esc50-demo",
+  "primaryContainer": {
+    "image": "164892691020.dkr.ecr.ap-southeast-2.amazonaws.com/esc50-demo:demo-v2",
+    "containerPort": 8080
+  },
+  "executionRoleArn": "arn:aws:iam::164892691020:role/ecsTaskExecutionRole",
+  "infrastructureRoleArn": "arn:aws:iam::164892691020:role/ecsInfrastructureRoleForExpressServices",
+  "cpu": "1024",
+  "memory": "4096",
+  "healthCheckPath": "/health",
+  "scalingTarget": {
+    "minTaskCount": 1,
+    "maxTaskCount": 2,
+    "autoScalingMetric": "AVERAGE_CPU",
+    "autoScalingTargetValue": 60
+  }
+}

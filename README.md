@@ -58,6 +58,24 @@ The script:
 4. Fuses their class probabilities with alpha 0.2.
 5. Prints the final ESC-50 class.
 
+## Web demo on AWS ECS
+
+The Gradio app accepts WAV uploads and displays the predicted class with the
+group probabilities and specialist fusion breakdown. Build and deploy it to
+Amazon ECS Express Mode using the steps in [deploy/aws/README.md](deploy/aws/README.md).
+
+Live demo: [ESC-50 Sound Classifier](https://es-d3438eb0c9d640c38cbe34d106f62a87.ecs.ap-southeast-2.on.aws)
+
+To run the web demo locally with the project virtual environment, install the
+web dependencies into `venv` and launch Uvicorn:
+
+```powershell
+.\venv\Scripts\python.exe -m pip install gradio fastapi "uvicorn[standard]"
+.\venv\Scripts\python.exe -m uvicorn web_app:app --host 127.0.0.1 --port 8080
+```
+
+Then open `http://127.0.0.1:8080` in a browser.
+
 ## Model checkpoints
 
 The `models/` directory contains the final eight trained checkpoints.
